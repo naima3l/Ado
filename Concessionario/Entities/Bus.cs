@@ -10,10 +10,14 @@ namespace Concessionario
     {
         public int SeatsNumber { get; set; }
 
-        public Bus(string brand, string model, int seatsNumber)
-            : base(brand, model)
+        public Bus(string brand, string model, int seatsNumber, int? id)
+            : base(brand, model, id)
         {
             SeatsNumber = seatsNumber;
+        }
+
+        public Bus()
+        {
         }
 
         public override string Print()

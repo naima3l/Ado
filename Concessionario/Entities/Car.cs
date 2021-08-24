@@ -11,11 +11,15 @@ namespace Concessionario
         public PowerSupply Supply { get; set; }
         public int DoorsNumber { get; set; }
 
-        public Car(string brand, string model, PowerSupply supply, int doorsNumber)
-            : base(brand, model)
+        public Car(string brand, string model, PowerSupply supply, int doorsNumber, int? id)
+            : base(brand, model, id)
         {
             Supply = supply;
             DoorsNumber = doorsNumber;
+        }
+
+        public Car()
+        {
         }
 
         public override string Print()

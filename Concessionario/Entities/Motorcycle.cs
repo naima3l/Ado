@@ -10,10 +10,14 @@ namespace Concessionario
     {
         public int ProductionYear { get; set; }
 
-        public Motorcycle(string brand, string model, int productionYear)
-            :base(brand, model)
+        public Motorcycle(string brand, string model, int productionYear, int? id)
+            :base(brand, model, id)
         {
             ProductionYear = productionYear;
+        }
+
+        public Motorcycle()
+        {
         }
 
         public override string Print()

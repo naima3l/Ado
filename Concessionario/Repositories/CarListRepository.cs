@@ -10,15 +10,15 @@ namespace Concessionario
     {
         public static List<Car> cars = new List<Car>
         {
-           new Car("Fiat", "500x", PowerSupply.Diesel, 5),
-           new Car("Ford", "Fiesta", PowerSupply.Gas, 5),
-           new Car("Tesla", "tt", PowerSupply.Electric, 3),
-           new Car("Fiat", "Punto", PowerSupply.Diesel, 3)
+           new Car("Fiat", "500x", PowerSupply.Diesel, 5, null),
+           new Car("Ford", "Fiesta", PowerSupply.Gas, 5, null),
+           new Car("Tesla", "tt", PowerSupply.Electric, 3, null),
+           new Car("Fiat", "Punto", PowerSupply.Diesel, 3, null)
 
         };
-        public void Delete(Car t)
+        public void Delete(Car car)
         {
-            throw new NotImplementedException();
+            cars.Remove(car);
         }
 
         public List<Car> Fetch()
@@ -26,25 +26,19 @@ namespace Concessionario
             return cars;
         }
 
-        public Car Get()
+        public Car GetById(int? id)
         {
-            throw new NotImplementedException();
+            return cars.Find(c => c.Id == id);
         }
 
         public void Insert(Car car)
         {
-            var c = CarListRepository.cars.Where(t => t.Brand == car.Brand && t.Model == car.Model && t.Supply == car.Supply);
-
-            if (c.Count() == 0)
-            {
-                cars.Add(car);
-            }
-            else Console.WriteLine("L'auto che stai provando ad inserire esste già");
+            cars.Add(car);
         }
 
-        public void Update(Car t)
+        public void Update(Car car)
         {
-            throw new NotImplementedException();
+            Delete(GetById(car.Id));
+            Insert(car);
         }
     }
-}

@@ -12,10 +12,15 @@ namespace Concessionario
         public string Model { get; set; }
         public int? Id { get; set; }
 
-        public Vehicle (string brand, string model)
+        public Vehicle (string brand, string model, int? id)
         {
             Brand = brand;
             Model = model;
+            Id = id;
+        }
+
+        public Vehicle()
+        {
         }
 
         public virtual string Print()

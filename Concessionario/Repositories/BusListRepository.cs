@@ -10,15 +10,15 @@ namespace Concessionario
     {
         public static List<Bus> buses = new List<Bus>()
         {
-            new Bus("Opel","pulmino", 50),
-            new Bus("Peugeut", "Pxx", 150),
-            new Bus("Fiat", "Pulmino piccolino", 30),
-            new Bus("Opel","pulmino più piccolo", 35)
+            new Bus("Opel","pulmino", 50, null),
+            new Bus("Peugeut", "Pxx", 150, null),
+            new Bus("Fiat", "Pulmino piccolino", 30, null),
+            new Bus("Opel","pulmino più piccolo", 35, null)
         };
         
-        public void Delete(Bus t)
+        public void Delete(Bus bus)
         {
-            throw new NotImplementedException();
+            buses.Remove(bus);
         }
 
         public List<Bus> Fetch()
@@ -26,25 +26,20 @@ namespace Concessionario
             return buses;
         }
 
-        public Bus Get()
+        public Bus GetById(int? id)
         {
-            throw new NotImplementedException();
+            return buses.Find(b => b.Id == id);
         }
 
         public void Insert(Bus b)
         {
-            var x = BusListRepository.buses.Where(t => t.Brand == b.Brand && t.Model == b.Model && t.SeatsNumber == b.SeatsNumber);
-
-            if (x.Count() == 0)
-            {
-                buses.Add(b);
-            }
-            else Console.WriteLine("Il pulmino che stai provando ad inserire esiste già");
+            buses.Add(b);
         }
 
-        public void Update(Bus t)
+        public void Update(Bus bus)
         {
-            throw new NotImplementedException();
+            Delete(GetById(bus.Id));
+            Insert(bus);
         }
     }
 }
