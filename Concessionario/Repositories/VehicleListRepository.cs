@@ -32,10 +32,7 @@ namespace Concessionario
             return vehicles;
         }
 
-        public Vehicle Get()
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public void Insert(Vehicle vehicle)
         {
@@ -43,6 +40,11 @@ namespace Concessionario
         }
 
         public void Update(Vehicle vehicle)
+        {
+            throw new NotImplementedException();
+        }
+
+        Vehicle IDbManager<Vehicle>.GetById(int? id)
         {
             throw new NotImplementedException();
         }

@@ -8,27 +8,27 @@ using System.Threading.Tasks;
 
 namespace Concessionario.SqlRepository
 {
-    class MotorcycleRepository : IMotorcycleDbManager
+    class CarRepository : ICarDbManager
     {
         static VehicleRepository vehicleRepository = new VehicleRepository();
 
         const string connectionString = @"Data Source = (localdb)\mssqllocaldb;" +
                                     "Initial Catalog = Magazzino;" +
                                     "Integrated Security = true;";
-        public void Delete(Motorcycle motorcycle)
+        public void Delete(Car car)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
-                int idVehicleToDelete = GetIdVehicle(motorcycle.Id);
+                int idVehicleToDelete = GetIdVehicle(car.Id);
 
                 SqlCommand command = new SqlCommand();
                 command.CommandType = System.Data.CommandType.Text;
                 command.Connection = connection;
 
-                command.CommandText = "delete from Motorcycle where IdMotorcycle = @id";
-                command.Parameters.AddWithValue("@id", motorcycle.Id);
+                command.CommandText = "delete from Car where IdCar = @id";
+                command.Parameters.AddWithValue("@id", car.Id);
 
                 command.ExecuteNonQuery();
 
@@ -49,7 +49,7 @@ namespace Concessionario.SqlRepository
                 command.Connection = connection;
                 command.CommandType = System.Data.CommandType.Text;
 
-                command.CommandText = "select * from Motorcycle where IdMotorcycle = @id";
+                command.CommandText = "select * from Car where IdCar = @id";
                 command.Parameters.AddWithValue("@id", id);
 
                 SqlDataReader reader = command.ExecuteReader();
@@ -63,9 +63,9 @@ namespace Concessionario.SqlRepository
             return idVehicleToDelete;
         }
 
-        public List<Motorcycle> Fetch()
+        public List<Car> Fetch()
         {
-            List<Motorcycle> motorcycles = new List<Motorcycle>();
+            List<Car> cars = new List<Car>();
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -74,7 +74,7 @@ namespace Concessionario.SqlRepository
                 SqlCommand command = new SqlCommand();
                 command.CommandType = System.Data.CommandType.Text;
                 command.Connection = connection;
-                command.CommandText = "select Vehicle.Brand, Vehicle.Model, Motorcycle.IdMotorcycle, Motorcycle.ProductionYear from Vehicle join Motorcycle on Vehicle.Id = Motorcycle.IdVehicle";
+                command.CommandText = "select Vehicle.Brand, Vehicle.Model, Car.IdCar, Car.DoorsNumber, Car.Supply from Vehicle join Car on Vehicle.Id = Car.IdVehicle";
 
                 SqlDataReader reader = command.ExecuteReader();
 
@@ -82,44 +82,46 @@ namespace Concessionario.SqlRepository
                 {
                     var brand = reader["Brand"];
                     var model = reader["Model"];
-                    var year = (int)reader["ProductionYear"];
-                    var id = (int)reader["IdMotorcycle"];
+                    var supply = (int)reader["Supply"];
+                    var doors = (int)reader["DoorsNumber"];
+                    var id = (int)reader["IdCar"];
 
-                    Motorcycle motorcycle = new Motorcycle((string)brand, (string)model, year, id);
+                    Car car = new Car((string)brand, (string)model, (PowerSupply)supply, doors, id);
 
-                    motorcycles.Add(motorcycle);
+                    cars.Add(car);
                 }
             }
-            return motorcycles;
+            return cars;
         }
 
-        public Motorcycle GetById(int? id)
+        public Car GetById(int? id)
         {
             throw new NotImplementedException();
         }
 
-        public void Insert(Motorcycle motorcycle)
+        public void Insert(Car car)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
-                Vehicle vehicle = new Vehicle(motorcycle.Brand, motorcycle.Model, null);
+                Vehicle vehicle = new Vehicle(car.Brand, car.Model, null);
                 vehicleRepository.Insert(vehicle);
                 int idVehicle = vehicleRepository.GetId(vehicle);
 
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
                 command.CommandType = System.Data.CommandType.Text;
-                command.CommandText = "insert into Motorcycle values (@idVehicle, @year)";
-                command.Parameters.AddWithValue("@year", motorcycle.ProductionYear);
+                command.CommandText = "insert into Car values (@doors, @supply,idVehicle)";
+                command.Parameters.AddWithValue("@doors",car.DoorsNumber);
+                command.Parameters.AddWithValue("@supply", (int)car.Supply);
                 command.Parameters.AddWithValue("@idVehicle", idVehicle);
 
                 command.ExecuteNonQuery();
             }
         }
 
-        public void Update(Motorcycle motorcycle)
+        public void Update(Car t)
         {
             throw new NotImplementedException();
         }

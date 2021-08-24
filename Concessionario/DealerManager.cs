@@ -9,12 +9,16 @@ namespace Concessionario
 {
     class DealerManager
     {
-        internal static VehicleListRepository vr = new VehicleListRepository();
+        //internal static VehicleListRepository vr = new VehicleListRepository();
         //internal static MotorcycleListRepository mr = new MotorcycleListRepository();
-        internal static CarListRepository cr = new CarListRepository();
-        internal static BusListRepository br = new BusListRepository();
+        //internal static CarListRepository cr = new CarListRepository();
+        //internal static BusListRepository br = new BusListRepository();
 
         public static MotorcycleRepository mr = new MotorcycleRepository();
+        public static BusRepository br = new BusRepository();
+        public static CarRepository cr = new CarRepository();
+        public static VehicleRepository vr = new VehicleRepository();
+
         internal static void ShowVehicles()
         {
             List<Vehicle> vehicles = vr.Fetch();

@@ -37,9 +37,10 @@ namespace Concessionario
                         DealerManager.ShowBuses();
                         break;
                     case 5:
+                        DealerManager.InsertVehicles();
                         break;
                     case 6:
-                        SellVehicle();
+                        DealerManager.SellVehicle();
                         break;
                     case 0:
                         Console.WriteLine("Ciao ciao!");
@@ -49,15 +50,6 @@ namespace Concessionario
             } while (continuare);
         }
 
-        private static void SellVehicle()
-        {
-            Console.WriteLine("Quale veicolo vuoi vendere?");
-            DealerManager.ShowVehicles();
-            Console.WriteLine("\nInserisci la marca");
-            string brand = Console.ReadLine();
-            Console.WriteLine("Inserisci il modello\n");
-            string model = Console.ReadLine();
-            DealerManager.SellVehicleByBrandAndModel(brand,model);
-        }
+       
     }
 }
