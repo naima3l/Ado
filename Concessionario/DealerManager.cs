@@ -1,4 +1,5 @@
-﻿using Concessionario.SqlRepository;
+﻿using Concessionario.SecondMethodSqlRepository;
+using Concessionario.SqlRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,10 @@ namespace Concessionario
         //internal static CarListRepository cr = new CarListRepository();
         //internal static BusListRepository br = new BusListRepository();
 
-        public static MotorcycleRepository mr = new MotorcycleRepository();
-        public static BusRepository br = new BusRepository();
-        public static CarRepository cr = new CarRepository();
+        //public static MotorcycleRepository mr = new MotorcycleRepository();
+        public static MotorcycleSMRepository mr = new MotorcycleSMRepository();
+        public static BusSMRepository br = new BusSMRepository();
+        public static CarSMRepository cr = new CarSMRepository();
         public static VehicleRepository vr = new VehicleRepository();
 
         internal static void ShowVehicles()

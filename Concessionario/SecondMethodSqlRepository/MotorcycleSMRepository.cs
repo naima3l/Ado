@@ -6,14 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Concessionario.SqlRepository
+namespace Concessionario.SecondMethodSqlRepository
 {
-    class MotorcycleRepository : IMotorcycleDbManager
+    class MotorcycleSMRepository : IMotorcycleDbManager
     {
-        static VehicleRepository vehicleRepository = new VehicleRepository();
-
         const string connectionString = @"Data Source = (localdb)\mssqllocaldb;" +
-                                    "Initial Catalog = Magazzino;" +
+                                    "Initial Catalog = Magazzino2;" +
                                     "Integrated Security = true;";
         public void Delete(Motorcycle motorcycle)
         {
@@ -21,46 +19,15 @@ namespace Concessionario.SqlRepository
             {
                 connection.Open();
 
-                int idVehicleToDelete = GetIdVehicle(motorcycle.Id);
-
                 SqlCommand command = new SqlCommand();
                 command.CommandType = System.Data.CommandType.Text;
                 command.Connection = connection;
 
-                command.CommandText = "delete from Motorcycle where IdMotorcycle = @id";
+                command.CommandText = "delete from Motorcycle where Id = @id";
                 command.Parameters.AddWithValue("@id", motorcycle.Id);
 
                 command.ExecuteNonQuery();
-
-                vehicleRepository.DeleteById(idVehicleToDelete);
-
             }
-        }
-
-        private int GetIdVehicle(int? id)
-        {
-            int idVehicleToDelete = 0;
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                SqlCommand command = new SqlCommand();
-                command.Connection = connection;
-                command.CommandType = System.Data.CommandType.Text;
-
-                command.CommandText = "select * from Motorcycle where IdMotorcycle = @id";
-                command.Parameters.AddWithValue("@id", id);
-
-                SqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    idVehicleToDelete = (int)reader["IdVehicle"];
-                }
-
-            }
-            return idVehicleToDelete;
         }
 
         public List<Motorcycle> Fetch()
@@ -74,7 +41,7 @@ namespace Concessionario.SqlRepository
                 SqlCommand command = new SqlCommand();
                 command.CommandType = System.Data.CommandType.Text;
                 command.Connection = connection;
-                command.CommandText = "select Vehicle.Brand, Vehicle.Model, Motorcycle.IdMotorcycle, Motorcycle.ProductionYear from Vehicle join Motorcycle on Vehicle.Id = Motorcycle.IdVehicle";
+                command.CommandText = "select * from Motorcycle";
 
                 SqlDataReader reader = command.ExecuteReader();
 
@@ -83,7 +50,7 @@ namespace Concessionario.SqlRepository
                     var brand = reader["Brand"];
                     var model = reader["Model"];
                     var year = (int)reader["ProductionYear"];
-                    var id = (int)reader["IdMotorcycle"];
+                    var id = (int)reader["Id"];
 
                     Motorcycle motorcycle = new Motorcycle((string)brand, (string)model, year, id);
 
@@ -102,9 +69,9 @@ namespace Concessionario.SqlRepository
                 connection.Open();
 
                 SqlCommand command = new SqlCommand();
-                command.CommandType = System.Data.CommandType.Text;
                 command.Connection = connection;
-                command.CommandText = "select Vehicle.Brand, Vehicle.Model, Motorcycle.Id, Motorcycle.ProductionYear from Vehicle join Motorcycle on Vehicle.Id = Motorcycle.IdVehicle where Motorcycle.Id = @id";
+                command.CommandType = System.Data.CommandType.Text;
+                command.CommandText = "select * from Motorcycle where Id=@id";
                 command.Parameters.AddWithValue("@id", id);
 
                 SqlDataReader reader = command.ExecuteReader();
@@ -115,7 +82,7 @@ namespace Concessionario.SqlRepository
                     var model = reader["Model"];
                     var year = (int)reader["ProductionYear"];
 
-                    motorcycle = new Motorcycle((string)brand, (string)model, year, id);
+                 motorcycle = new Motorcycle((string)brand, (string)model, year, id);
                 }
             }
             return motorcycle;
@@ -127,16 +94,13 @@ namespace Concessionario.SqlRepository
             {
                 connection.Open();
 
-                Vehicle vehicle = new Vehicle(motorcycle.Brand, motorcycle.Model, null);
-                vehicleRepository.Insert(vehicle);
-                int idVehicle = vehicleRepository.GetId(vehicle);
-
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
                 command.CommandType = System.Data.CommandType.Text;
-                command.CommandText = "insert into Motorcycle values (@idVehicle, @year)";
+                command.CommandText = "insert into Motorcycle values (@brand,@model,@year)";
+                command.Parameters.AddWithValue("@brand", motorcycle.Brand);
+                command.Parameters.AddWithValue("@model", motorcycle.Model);
                 command.Parameters.AddWithValue("@year", motorcycle.ProductionYear);
-                command.Parameters.AddWithValue("@idVehicle", idVehicle);
 
                 command.ExecuteNonQuery();
             }
@@ -148,20 +112,16 @@ namespace Concessionario.SqlRepository
             {
                 connection.Open();
 
-                int idVehicleToUpdate = GetIdVehicle(motorcycle.Id);
-                Vehicle vehicle = new Vehicle(motorcycle.Brand, motorcycle.Model, idVehicleToUpdate);
-
                 SqlCommand command = new SqlCommand();
-                command.CommandType = System.Data.CommandType.Text;
                 command.Connection = connection;
-
-                command.CommandText = "update Motorcycle set ProductionYear = @year where Id = @id";
+                command.CommandType = System.Data.CommandType.Text;
+                command.CommandText = "update Motorcycle set Brand = @brand, Model = @model, ProductionYear = @year where Id = @id";
+                command.Parameters.AddWithValue("@brand", motorcycle.Brand);
+                command.Parameters.AddWithValue("@model", motorcycle.Model);
                 command.Parameters.AddWithValue("@year", motorcycle.ProductionYear);
-                command.Parameters.AddWithValue("@id", motorcycle.Id);
+                command.Parameters.AddWithValue("Id", motorcycle.Id);
 
                 command.ExecuteNonQuery();
-
-                vehicleRepository.Update(vehicle);
             }
         }
     }
