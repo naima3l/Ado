@@ -1,5 +1,6 @@
 ﻿using Concessionario.SecondMethodSqlRepository;
 using Concessionario.SqlRepository;
+using Concessionario.ThirdMethodRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,15 @@ namespace Concessionario
         //internal static BusListRepository br = new BusListRepository();
 
         //public static MotorcycleRepository mr = new MotorcycleRepository();
-        public static MotorcycleSMRepository mr = new MotorcycleSMRepository();
-        public static BusSMRepository br = new BusSMRepository();
-        public static CarSMRepository cr = new CarSMRepository();
+        //public static MotorcycleSMRepository mr = new MotorcycleSMRepository();
+        //public static BusSMRepository br = new BusSMRepository();
+        //public static CarSMRepository cr = new CarSMRepository();
         public static VehicleRepository vr = new VehicleRepository();
+
+        //---REPOSITORY CHE CHIAMANO LE CLASSI CON ADO E IL 3 METODO(UNICA TABELLA CON DISCRIMINATORE)
+        public static MotorcycleTMRepository mr = new MotorcycleTMRepository();
+        public static BusTMRepository br = new BusTMRepository();
+        public static CarTMRepository cr = new CarTMRepository();
 
         internal static void ShowVehicles()
         {
